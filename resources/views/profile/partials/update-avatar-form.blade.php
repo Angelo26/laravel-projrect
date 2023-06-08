@@ -17,6 +17,8 @@
         @csrf
         @method('patch')
 
+        <img height="100" width="100" src="{{ "/storage/$user->avatar" }}" alt="user avatar" />
+
         <div>
             <x-input-label for="avatar" value="Avatar" />
             <x-text-input id="avatar" name="avatar" type="file" class="mt-1 block w-full" :value="old('avatar', $user->avatar)" required autofocus/>
