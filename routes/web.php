@@ -55,3 +55,10 @@ Route::get('/auth/callback', function () {
  
     return redirect('/dashboard');
 });
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/ticket/create', [TicketController::class, 'create']);
+    
+    Route::post('/ticket/create', [TicketController::class, 'store']);
+});
