@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\Profile\AvatarController;
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -20,7 +21,7 @@ use Laravel\Socialite\Facades\Socialite;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 Route::get('/dashboard', function () {
@@ -41,8 +42,9 @@ Route::post('/auth/redirect', function () {
 })->name('login.github');
  
 Route::get('/auth/callback', function () {
+    
     $user = Socialite::driver('github')->user();
- 
+
     $user = User::firstOrCreate([
         'email' => $user->email
     ], [
@@ -53,12 +55,10 @@ Route::get('/auth/callback', function () {
  
     Auth::login($user);
  
-    return redirect('/dashboard');
+    return redirect()->route('ticket.index');
 });
 
-
+  
 Route::middleware('auth')->group(function () {
-    Route::get('/ticket/create', [TicketController::class, 'create']);
-    
-    Route::post('/ticket/create', [TicketController::class, 'store']);
+    Route::resource('ticket', TicketController::class);
 });
