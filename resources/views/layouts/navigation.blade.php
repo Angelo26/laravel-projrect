@@ -14,7 +14,7 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('ticket.index')" :active="request()->routeIs('ticket.index')">
+                    <x-nav-link :href="route('ticket.index', 'ticket.show')" :active="request()->routeIs('ticket.index', 'ticket.show')">
                         {{ __('Tickets') }}
                     </x-nav-link>
                     <x-nav-link :href="route('ticket.create')" :active="request()->routeIs('ticket.create')">
