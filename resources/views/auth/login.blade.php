@@ -42,6 +42,18 @@
             <x-primary-button class="ml-3">
                 {{ __('Log in') }}
             </x-primary-button>
+
         </div>
+    </form>
+
+    <div class="text-center mt-2 mb-4">
+        <h3 class="text-white">or</h3>
+    </div>
+
+    <form method="post" action="{{ route('login.github') }}" class="text-center mb-4">
+        @csrf
+        <x-primary-button>
+            {{ __('Log in with Github') }}
+        </x-primary-button>
     </form>
 </x-guest-layout>
