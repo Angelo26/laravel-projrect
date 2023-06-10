@@ -22,16 +22,19 @@
                                 <a href="{{ '/storage/'.$ticket->attachment }}" target="_blank">Atttachment</a>
                             </div>
                         @endif
-                        <p class="text-right"> {{ $ticket->created_at->diffForHumans() }} </p>
+
+                        @if($ticket->created_at == $ticket->updated_at)
+                            <p class="text-right"> Created {{ $ticket->created_at->diffForHumans() }} </p>
+                        @else
+                        <p class="text-right"> Upadated {{ $ticket->updated_at->diffForHumans() }} </p>
+                        @endif
                      </div>
                 </div>
                 <div class="flex w-full justify-end mt-4">
                     <div class="mr-4">
-                        <form method="post" action="{{ route('ticket.destroy', $ticket->id) }}">
-                            @method('delete')
-                            @csrf
+                        <a href="{{ route('ticket.edit', $ticket->id) }}">
                             <x-primary-button>Edit</x-primary-button>
-                        </form>
+                        </a>
                     </div>
                     <div class="ml-4">
                         <form method="post" action="{{ route('ticket.destroy', $ticket->id) }}">

@@ -3,7 +3,7 @@
     <x-slot name="header">
         <div class="flex justify-center w-full">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Tickets') }}
+                {{ __('Recent Tickets') }}
             </h2>
         </div>
     </x-slot>
@@ -16,7 +16,7 @@
                     @forelse ($tickets as $ticket)
                         <div class="text-white w-40 border border-white">
                             <a href="{{ route('ticket.show', $ticket->id) }}">{{ $ticket->title }}
-                                <p>{{ $ticket->created_at->diffForHumans() }}</p>
+                                <p>{{ $ticket->updated_at->diffForHumans() }}</p>
                             </a>
                         </div>
                         

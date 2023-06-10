@@ -61,7 +61,7 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket)
     {
-        //
+        return view('ticket.edit', compact('ticket'));
     }
 
     /**
@@ -69,7 +69,16 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
-        //
+        $ticket->update(['title' => $request->title, 'description' => $request->description]);
+
+        if($request->file('attachment')){
+            if($currentAttachment = $ticket->attachment){
+                Storage::disk('public')->delete($currentAttachment);
+            }
+            $path = Storage::disk('public')->put('attachments', $request->file('attachment'));
+            $ticket->update(['attachment' => $path]);
+        }
+        return redirect()->route('ticket.show', compact('ticket'));
     }
 
     /**
