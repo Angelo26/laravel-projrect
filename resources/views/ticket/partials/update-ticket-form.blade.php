@@ -19,7 +19,7 @@
         </div>
         <div>
             <x-input-label for="description" :value="__('Description')" />
-            <x-textarea id="description"  name="description" class="mt-1 block w-full" :value="old('description', $ticket->description)" required autofocus/>
+            <x-textarea id="description"  name="description" class="mt-1 block w-full" rows="4" :value="old('description', $ticket->description)" required autofocus/>
             <x-input-error class="mt-2" :messages="$errors->get('description')" />
         </div>
 

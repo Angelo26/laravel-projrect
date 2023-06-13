@@ -43,8 +43,6 @@ class TicketController extends Controller
             $path = Storage::disk('public')->put('attachments', $request->file('attachment'));
             $ticket->update(['attachment' => $path]);
         }
-        
-
         return redirect()->route('ticket.index');
     }
 
@@ -69,16 +67,25 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
-        $ticket->update(['title' => $request->title, 'description' => $request->description]);
-
-        if($request->file('attachment')){
-            if($currentAttachment = $ticket->attachment){
-                Storage::disk('public')->delete($currentAttachment);
+    
+        $statusValid = array('approved', 'rejected');
+        if(in_array($request->status, $statusValid)){
+            if(auth()->user()->checkAdmin){
+                $ticket->update(['status' => $request->status]);
+                return redirect()->back();
             }
-            $path = Storage::disk('public')->put('attachments', $request->file('attachment'));
-            $ticket->update(['attachment' => $path]);
         }
-        return redirect()->route('ticket.show', compact('ticket'));
+        else{
+            $ticket->update($request->except('attachment'));
+            if($request->file('attachment')){
+                if($currentAttachment = $ticket->attachment){
+                    Storage::disk('public')->delete($currentAttachment);
+                }
+                $path = Storage::disk('public')->put('attachments', $request->file('attachment'));
+                $ticket->update(['attachment' => $path]);
+            }
+            return redirect()->route('ticket.show', compact('ticket'));
+        }
     }
 
     /**
@@ -88,5 +95,11 @@ class TicketController extends Controller
     {
         $ticket->delete();
         return redirect()->route('ticket.index');
+    }
+
+    public function verify()
+    {
+        $tickets = Ticket::latest()->get();
+        return view('ticket.verify', compact('tickets'));
     }
 }

@@ -20,6 +20,12 @@
                     <x-nav-link :href="route('ticket.create')" :active="request()->routeIs('ticket.create')">
                         {{ __('Create Ticket') }}
                     </x-nav-link>
+                    @if (auth()->user()->checkAdmin)
+                        <x-nav-link :href="route('ticket.verify')" :active="request()->routeIs('ticket.verify')">
+                            {{ __('Verify Ticket') }}
+                        </x-nav-link>
+                    @endif
+                    
                 </div>
             </div>
 

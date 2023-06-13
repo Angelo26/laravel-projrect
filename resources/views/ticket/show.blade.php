@@ -23,7 +23,7 @@
                             </div>
                         @endif
 
-                        @if($ticket->created_at == $ticket->updated_at)
+                        @if($ticket->created_at >= $ticket->updated_at)
                             <p class="text-right"> Created {{ $ticket->created_at->diffForHumans() }} </p>
                         @else
                         <p class="text-right"> Upadated {{ $ticket->updated_at->diffForHumans() }} </p>

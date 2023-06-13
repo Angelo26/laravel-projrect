@@ -14,14 +14,18 @@
                 <div class="w-full p-6 flex justify-between flex-wrap text-gray-900 dark:text-gray-100">
                     
                     @forelse ($tickets as $ticket)
-                        <div class="text-white w-40 border border-white">
-                            <a href="{{ route('ticket.show', $ticket->id) }}">{{ $ticket->title }}
-                                <p>{{ $ticket->updated_at->diffForHumans() }}</p>
+                        <div>
+                            <a href="{{ route('ticket.show', $ticket->id) }}">
+                                <div class="text-white p-4 border border-white">
+                                    <p>{{ $ticket->title }}</p>
+                                    <p>{{ $ticket->updated_at->diffForHumans() }}</p>
+                                </div>
                             </a>
                         </div>
-                        
                     @empty
-                        <p class="text-white">You don't have any ticket yet.</p>
+                        <div class="w-full flex justify-center">
+                            <p class="text-white">No ticket found.</p>
+                        </div>
                     @endforelse
 
                 </div>
