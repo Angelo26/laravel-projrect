@@ -23,9 +23,9 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -61,6 +61,7 @@ Route::get('/auth/callback', function () {
 Route::middleware('auth')->group(function () {
     Route::resource('ticket', TicketController::class);
     Route::get('verify', [TicketController::class, 'verify'])->name('ticket.verify');
+    Route::get('personal', [TicketController::class, 'personal'])->name('ticket.personal');
 });
 
 

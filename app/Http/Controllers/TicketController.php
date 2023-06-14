@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Ticket;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
+use App\Notifications\TicketUpdateNotification;
 use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
@@ -15,8 +16,7 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $user    = auth()->user();
-        $tickets = Ticket::latest()->get();
+        $tickets = Ticket::where('status', 'approved')->get();
         return view('ticket.index', compact('tickets'));
     }
 
@@ -68,10 +68,14 @@ class TicketController extends Controller
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
     
-        $statusValid = array('approved', 'rejected');
-        if(in_array($request->status, $statusValid)){
-            if(auth()->user()->checkAdmin){
-                $ticket->update(['status' => $request->status]);
+        if($request->status != $ticket->status){
+            if($request->has('status')){
+                if(auth()->user()->checkAdmin){
+                    $ticket->timestamps = false;
+                    $ticket->update(['status' => $request->status]);
+                    $ticket->timestamps = true;
+                    $ticket->user->notify(new TicketUpdateNotification($ticket));
+                }
                 return redirect()->back();
             }
         }
@@ -101,5 +105,12 @@ class TicketController extends Controller
     {
         $tickets = Ticket::latest()->get();
         return view('ticket.verify', compact('tickets'));
+    }
+
+    public function personal()
+    {
+        $user    = auth()->user();
+        $tickets = Ticket::where('user_id', $user->id)->get();
+        return view('ticket.personal', compact('tickets'));
     }
 }

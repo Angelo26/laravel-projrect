@@ -22,6 +22,9 @@
                                 <a href="{{ '/storage/'.$ticket->attachment }}" target="_blank">Atttachment</a>
                             </div>
                         @endif
+                        @if(auth()->user()->checkAdmin or $ticket->user_id == auth()->user()->id)
+                            <p class="ml-4 mb-2 text-right"> Status: {{ ucfirst($ticket->status) }} </p>
+                        @endif
 
                         @if($ticket->created_at >= $ticket->updated_at)
                             <p class="text-right"> Created {{ $ticket->created_at->diffForHumans() }} </p>
@@ -31,18 +34,39 @@
                      </div>
                 </div>
                 <div class="flex w-full justify-end mt-4">
-                    <div class="mr-4">
-                        <a href="{{ route('ticket.edit', $ticket->id) }}">
-                            <x-primary-button>Edit</x-primary-button>
-                        </a>
-                    </div>
-                    <div class="ml-4">
-                        <form method="post" action="{{ route('ticket.destroy', $ticket->id) }}">
-                            @method('delete')
-                            @csrf
-                            <x-danger-button>Delete</x-danger-button>
-                        </form>
-                    </div>
+                    
+                    @if(auth()->user()->checkAdmin)
+                        <div>
+                            <form class="ml-2" action="{{ route('ticket.update', $ticket->id) }}" method="post">
+                                @csrf
+                                @method('patch')
+                                <input type="hidden" name="status" value="approved">
+                                <x-primary-button>Approve</x-primary-button>
+                            </form>
+                        </div>
+                        <div>
+                            <form class="ml-2" action="{{ route('ticket.update', $ticket->id) }}" method="post">
+                                @csrf
+                                @method('patch')
+                                <input type="hidden" name="status" value="rejected">
+                                <x-danger-button>Reject</x-danger-button>
+                            </form>  
+                        </div>
+                    @endif
+                    @if(auth()->user()->checkAdmin or $ticket->user_id == auth()->user()->id)
+                        <div class="ml-2">
+                            <a href="{{ route('ticket.edit', $ticket->id) }}">
+                                <x-primary-button>Edit</x-primary-button>
+                            </a>
+                        </div>
+                        <div class="ml-2">
+                            <form method="post" action="{{ route('ticket.destroy', $ticket->id) }}">
+                                @method('delete')
+                                @csrf
+                                <x-danger-button>Delete</x-danger-button>
+                            </form>
+                        </div>
+                    @endif
                 </div>
             </div>
 

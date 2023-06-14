@@ -16,26 +16,13 @@
                         @forelse ($tickets as $ticket)
                             <div>
                                 
-                                <div class="text-white p-4 border border-white">
-                                    <p>{{ $ticket->title }}</p>
-                                    <p>{{ $ticket->updated_at->diffForHumans() }}</p>
-
-                                    <div class="flex">
-                                        <form class="m-2" action="{{ route('ticket.update', $ticket->id) }}" method="post">
-                                            @csrf
-                                            @method('patch')
-                                            <input type="hidden" name="status" value="approved">
-                                            <x-primary-button>Approve</x-primary-button>
-                                        </form>
-                                        <form class="ml-2" action="{{ route('ticket.update', $ticket->id) }}" method="post">
-                                            @csrf
-                                            @method('patch')
-                                            <input type="hidden" name="status" value="rejected">
-                                            <x-danger-button>Reject</x-danger-button>
-                                        </form>
-                                            
+                                <a href="{{ route('ticket.show', $ticket->id) }}">
+                                    <div class="text-white p-4 border border-white">
+                                        <p>{{ $ticket->title }}</p>
+                                        <p>{{ $ticket->updated_at->diffForHumans() }}</p>
+                                        <p>Status: {{ $ticket->status }}</p>
                                     </div>
-                                </div>
+                                </a>
                                     <a href="{{ route('ticket.show', $ticket->id) }}"></a>
                             </div>
                         @empty

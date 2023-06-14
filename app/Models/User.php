@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -52,4 +53,9 @@ class User extends Authenticatable
             get: fn() => in_array($this->email, $admins)
         );
     }
+
+    public function tickets(): HasMany {
+        return $this->hasMany(Ticket::class);
+    }
+
 }
